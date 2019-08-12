@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PO_CONFIG>
+	<DB_CONNECTION TYPE="oracle" VALID="TRUE">
+		<PROPERTY NAME="DB_URL">jdbc:mysql://localhost:3306/test</PROPERTY>
+		<!--<PROPERTY NAME="DB_URL">jdbc:oracle:thin:@10.6.20.87:1521:orcl</PROPERTY>-->
+		<PROPERTY NAME="DB_USER">root</PROPERTY>
+		<PROPERTY NAME="DB_PASSWORD">workout</PROPERTY>
+	</DB_CONNECTION>
+
+	<GEN_PO_PATH NAME="/Users/summer/Documents/Projects/study/PO3Proj/bury/src/test/java/com/sandrew/bury/model" />
+
+	<TABLES PACKAGE="com.sandrew.bury.model" IS_GENERATOR="TRUE">
+		<!--<TABLE TAB_NAME="tm_user" PO_NAME="UserPO"></TABLE>-->
+		<TABLE TAB_NAME="tt_test" PO_NAME="TestPO"></TABLE>
+		<!--<TABLE TAB_NAME="tt_session" PO_NAME="SessionPO"></TABLE>-->
+		<!--<TABLE TAB_NAME="TT_TEST_ORA" PO_NAME="TestOraPO"></TABLE>
+		<TABLE TAB_NAME="TM_ORG" PO_NAME="OrgPO"></TABLE>-->
+	</TABLES>
+</PO_CONFIG>

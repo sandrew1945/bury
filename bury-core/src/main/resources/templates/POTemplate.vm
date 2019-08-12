@@ -1,0 +1,72 @@
+/**
+ *   自动生成的PO,不要手动修改
+ *
+ */
+package ${package};
+
+import com.sandrew.bury.annotations.TableName;
+import com.sandrew.bury.annotations.ColumnName;
+import com.sandrew.bury.bean.PO;
+#if($hasDate)
+import java.util.Date;
+#end
+#if($hasBigDecimal)
+import java.math.BigDecimal;
+#end
+#if($hasBlob)
+import java.sql.Blob;
+#end
+#if($hasClob)
+import java.sql.Clob;
+#end
+
+@TableName("$tableName")
+public class ${className} extends PO
+{
+
+    public ${className}()
+    {
+    }
+
+#set( $params="" )
+#foreach( $item in $!{columnDatas} )
+    #if($item.pk == "true" )
+        #set( $params = "$params$item.type $item.poName," )
+    #end
+#end
+#set( $length=$params.length() - 1 )
+
+    public ${className}($params.substring(0, $length))
+    {
+#foreach( $item in $!{columnDatas} )
+#if($item.pk == "true" )
+        this.$item.poName = $item.poName;
+#end
+#end
+    }
+
+#foreach( $item in $!{columnDatas} )
+    @ColumnName(value = "$item.colName", isPK = $item.pk, autoIncrement = $item.autoIncrement)
+    private $item.type $item.poName;
+
+#end
+
+#foreach( $item in $!{columnDatas} )
+    #set( $end=$item.poName.length() )
+    #set( $str=$item.poName.substring( 1 ,$end ) )
+    #set( $start = $item.poName.substring(0,1).toUpperCase() )
+    public void set$start$str($item.type $item.poName)
+    {
+        this.$item.poName = $item.poName;
+    }
+    #set( $get = "get")
+    #if($item.type == "boolean" )
+        #set( $get = "is")
+    #end
+
+    public $item.type $get$start$str()
+    {
+        return this.$item.poName;
+    }
+#end
+}
