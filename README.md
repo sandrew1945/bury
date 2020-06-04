@@ -446,4 +446,35 @@ Bury可以支持多数据源连接，支持直接连接或使用连接池连接(
 		{
 			session.close();
 		}
+		
+// 使用自定义返回结果包装器
+	@Test
+    public void test()
+    {
+        String configFile = "bury-config.xml";
+        SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+        SqlSessionFactory factory = builder.build(configFile);
+        Session session = factory.openSession("ds002");
+        try
+        {
+            session.select("select * from tt_test", null, new DAOCallback<Test>()
+            {
+                @Override
+                public TmUserPO wrapper(ResultSet rs, int index) throws SQLException
+                {
+                    Test test = new Test();
+                    test.setId(rs.getInt("ID"));
+					test.setName(rs.getString("name"));
+                    return test;
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            session.close();
+        }
 ```
