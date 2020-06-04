@@ -147,7 +147,7 @@ public class POCallBack<T extends PO> implements DAOCallback<T>
 		ResultSetMetaData meta = rs.getMetaData();
 		for (int i = 1; i <= meta.getColumnCount(); i++)
 		{
-			String key = meta.getColumnName(i);
+			String key = meta.getColumnLabel(i);
 			Object value = rs.getObject(key);
 			resultMap.put(key, value);
 		}
