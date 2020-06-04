@@ -329,7 +329,7 @@ Bury可以支持多数据源连接，支持直接连接或使用连接池连接(
 基本操作
 ```java
 // insert操作
-@Test
+	@Test
 	public void test()
 	{
 		try
@@ -368,4 +368,82 @@ Bury可以支持多数据源连接，支持直接连接或使用连接池连接(
 		}
 		
 	}
+
+// 使用id查询
+	@Test
+	public void test()
+	{
+		String configFile = "bury-config.xml";
+		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+		SqlSessionFactory factory = builder.build(configFile);
+		Session session = factory.openSession();
+		try
+		{
+			TestPO po = new TestPO();
+			po.setId(1);
+			TestPO value = session.selectById(po);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
+	}
+	
+// 使用sql
+	@Test
+	public void test()
+	{
+		String configFile = "bury-config.xml";
+		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+		SqlSessionFactory factory = builder.build(configFile);
+		Session session = factory.openSession();
+		try
+		{
+			StringBuilder sql = new StringBuilder();
+            sql.append("select * \n");
+            sql.append("from tt_test tr\n");
+            sql.append("where tr.id = ?\n");
+            sql.append("and tr.name = ?\n");
+            Parameters parameters = new Parameters(1, "name");
+            return session.select(sql.toString(), parameters.getParams(), new POCallBack(RolePO.class));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
+	}
+
+// 分页查询
+	@Test
+	public void test()
+	{
+		String configFile = "bury-config.xml";
+		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+		SqlSessionFactory factory = builder.build(configFile);
+		Session session = factory.openSession();
+		try
+		{
+			StringBuilder sql = new StringBuilder();
+			sql.append("select * \n");
+            sql.append("from tt_test tr\n");
+            sql.append("where tr.id = ?\n");
+            sql.append("and tr.name = ?\n");
+			PageResult<TmUserPO> result = session.pageQuery(sql.toString(), null, new POCallBack(Test.class), 10, 1);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
 ```
