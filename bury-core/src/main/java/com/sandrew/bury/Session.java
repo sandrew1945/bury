@@ -16,7 +16,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的insert方法
-     * LastUpdate  : 2010-9-13
      * @param sql		SQL
      * @param params	参数集合
      * @return			插入记录数
@@ -26,7 +25,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的insert方法(LOB版本)
-     * LastUpdate  : 2011-12-21
      * @param sql
      * @param params
      * @return
@@ -36,7 +34,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的insert方法
-     * LastUpdate  : 2010-9-13
      * @param po		PO对象
      * @return			插入记录数
      * @throws POException
@@ -46,7 +43,6 @@ public interface Session
     /**
      *
      * Function    : 批量插入
-     * LastUpdate  : 2013-4-25
      * @param sql
      * @param parameters
      * @return
@@ -57,7 +53,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的delete方法
-     * LastUpdate  : 2010-9-13
      * @param sql		SQL
      * @param params	参数集合
      * @return			删除记录数
@@ -68,7 +63,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的delete方法
-     * LastUpdate  : 2010-9-13
      * @param po		PO对象
      * @return			删除记录数
      * @throws POException
@@ -78,7 +72,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的update方法
-     * LastUpdate  : 2010-9-13
      * @param sql		SQL
      * @param params	参数集合
      * @return			更新记录数
@@ -89,7 +82,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的update操作
-     * LastUpdate  : 2010-9-13
      * @param cond		作为where条件的PO对象
      * @param value		作为更新值的PO对象
      * @return			更新记录数
@@ -100,7 +92,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的update方法(LOB版本)
-     * LastUpdate  : 2011-12-22
      * @param sql
      * @param params
      * @return
@@ -111,7 +102,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的select操作
-     * LastUpdate  : 2010-9-13
      * @param sql		SQL
      * @param params	参数集合
      * @return			返回一个装载着Map的集合，Map的Key为表列名，Value为此列的值
@@ -122,7 +112,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的排序select操作
-     * LastUpdate  : 2010-9-13
      * @param po		PO对象
      * @param order		排序方式 ASC|DESC
      * @param colNames	排序字段名，可多个
@@ -134,7 +123,6 @@ public interface Session
     /**
      *
      * Function    : 通过SQL的select操作
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @param sql		SQL
      * @param params	参数集合
@@ -147,7 +135,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的select操作
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @param po		PO对象
      * @return			装载着PO或自定义Bean的集合
@@ -158,7 +145,6 @@ public interface Session
     /**
      *
      * Function    : 通过PO的排序select操作
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @param po		PO对象
      * @param callback	回调函数
@@ -173,7 +159,6 @@ public interface Session
     /**
      *
      * Function    : 通过主键查询
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @return
      * @throws POException
@@ -183,7 +168,6 @@ public interface Session
     /**
      *
      * Function    : 分页查询操作
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @param sql		SQL
      * @param params	参数集合
@@ -198,7 +182,6 @@ public interface Session
     /**
      *
      * Function    : 调用Function
-     * LastUpdate  : 2010-9-13
      * @param functionName	Function名称
      * @param ins			输入参数集合
      * @param outType		输出类型
@@ -209,7 +192,6 @@ public interface Session
     /**
      *
      * Function    : 调用Procedure
-     * LastUpdate  : 2010-9-13
      * @param procedureName	Procedure名称
      * @param ins			输入参数集合
      * @param outs			输出参数集合
@@ -220,7 +202,6 @@ public interface Session
     /**
      *
      * Function    : 特殊的Procedure调用,只返回一个CURSOR
-     * LastUpdate  : 2010-9-13
      * @param <T>
      * @param procedureName	Procedure名称
      * @param ins			输入参数集合
@@ -232,7 +213,6 @@ public interface Session
     /**
      *
      * Function    : 获取Long类型序列ID
-     * LastUpdate  : 2010-9-13
      * @param sequenceName	sequence名称
      * @return
      */
@@ -241,7 +221,6 @@ public interface Session
     /**
      *
      * Function    : 获取Integer类型序列ID
-     * LastUpdate  : 2010-9-13
      * @param sequenceName	sequence名称
      * @return
      */
@@ -250,7 +229,6 @@ public interface Session
     /**
      *
      * Function    : 获取String类型序列ID
-     * LastUpdate  : 2010-9-13
      * @param sequenceName	sequence名称
      * @return
      */
@@ -259,14 +237,12 @@ public interface Session
     /**
      *
      * Function    : 提交
-     * LastUpdate  : 2016年11月29日
      */
     void commit() throws POException;
 
     /**
      *
      * Function    : 回滚
-     * LastUpdate  : 2016年11月29日
      */
     void rollback() throws POException;
 
@@ -279,7 +255,6 @@ public interface Session
     /**
      *
      * Function    : 读取BLOB字段
-     * LastUpdate  : 2010-10-2
      * @param colName
      * @param sql
      * @param params
