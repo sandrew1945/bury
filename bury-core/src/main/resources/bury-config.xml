@@ -12,7 +12,7 @@
 			<property name="databaseType" value="mysql" />
 			<property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8" />
 			<property name="username" value="root" />
-			<property name="password" value="workout" />
+			<property name="password" value="pass" />
 			<property name="initialPoolSize" value="2" />
 			<property name="maxPoolSize" value="4" />
 			<property name="minPoolSize" value="2" />
@@ -23,9 +23,9 @@
 			<property name="datasource" value="c3p0" />
 			<!-- 数据库类型: 允许值:mysql|oracle|mssql -->
 			<property name="databaseType" value="oracle" />
-			<property name="url" value="jdbc:oracle:thin:@10.6.20.87:1521:orcl" />
-			<property name="username" value="pcc" />
-			<property name="password" value="workout" />
+			<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+			<property name="username" value="sys" />
+			<property name="password" value="pass" />
 			<property name="initialPoolSize" value="5" />
 			<property name="maxPoolSize" value="10" />
 			<property name="minPoolSize" value="2" />
