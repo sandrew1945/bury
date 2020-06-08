@@ -7,9 +7,8 @@
 		<PROPERTY NAME="DB_PASSWORD">pass</PROPERTY>
 	</DB_CONNECTION>
 
-	<GEN_PO_PATH NAME="/Users/summer/Documents/Projects/study/PO3Proj/bury/src/test/java/com/sandrew/bury/model" />
-
+	<GEN_PO_PATH NAME="/src/test/java/com/sandrew/bury/model" />
 	<TABLES PACKAGE="com.sandrew.bury.model" IS_GENERATOR="TRUE">
-		<TABLE TAB_NAME="tt_test" PO_NAME="TestPO"></TABLE>
+		<TABLE TAB_NAME="tt_test" PO_NAME="Test"></TABLE>
 	</TABLES>
 </PO_CONFIG>

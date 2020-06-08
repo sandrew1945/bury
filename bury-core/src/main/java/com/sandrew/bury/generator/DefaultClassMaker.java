@@ -56,6 +56,7 @@ public class DefaultClassMaker
 			case Types.BINARY:
 				break;
 			case Types.BIT:
+				cls = Boolean.class;
 				break;
 			case Types.BLOB:
 				//cls = java.sql.Blob.class;
