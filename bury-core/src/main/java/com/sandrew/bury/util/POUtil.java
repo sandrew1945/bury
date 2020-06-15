@@ -24,14 +24,11 @@
 package com.sandrew.bury.util;
 
 
-import com.sandrew.bury.bean.CommonPack;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.exception.POException;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -151,6 +148,7 @@ public class POUtil
 			{
 				sB.append('_');
 			}
+			// todo 临时解决POCallback使用自定义bean时，在mysql中字段名为大写的bug，需要再完善一下
 			sB.append(Character.toLowerCase(c));
 		}
 		return sB.toString();
@@ -229,17 +227,7 @@ public class POUtil
 		Method meth = null;
 		try
 		{
-			if (cls.getDeclaredField(fieldName).getType().equals(CommonPack.class))
-			{
-				// release.2 支持PO字段为CommonPack类型字段,获取CommonPack泛型类型
-				Field field = cls.getDeclaredField(fieldName);
-				meth = cls.getMethod(methodName, Class.forName(((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0].getTypeName()));
-			}
-			else
-			{
-				// 支持老版本PO字段为真实类型
-				meth = cls.getMethod(methodName, cls.getDeclaredField(fieldName).getType());
-			}
+			meth = cls.getMethod(methodName, cls.getDeclaredField(fieldName).getType());
 			Object[] arglist = new Object[] { setValue };
 			value = meth.invoke(po, arglist);
 		}
@@ -262,17 +250,17 @@ public class POUtil
 	public static LinkedList<Object> encapParams(POMapping mapping, PO... po)
 	{
 		// 封装参数List
-		LinkedList<Object> params = new LinkedList<>();
+		LinkedList<Object> params = new LinkedList<Object>();
 		for (int j = 0; j < po.length; j++)
 		{
 			for (int i = 0; i < mapping.getColSize(); i++)
 			{
 				// 如果PO此属性不为null，则添加AND添件
 				// 获取此属性字段的get方法
-				CommonPack value = (CommonPack) POUtil.invokeGetMethodByField(po[j], mapping.getPropertyName(i));
-				if (null != value.getValue())
+				Object value = POUtil.invokeGetMethodByField(po[j], mapping.getPropertyName(i));
+				if (null != value)
 				{
-					params.add(value.getValue());
+					params.add(value);
 				}
 			}
 		}
