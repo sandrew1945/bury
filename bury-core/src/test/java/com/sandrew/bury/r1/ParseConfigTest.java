@@ -1,4 +1,4 @@
-package com.sandrew.bury;
+package com.sandrew.bury.r1;
 
 import com.sandrew.bury.configuration.ConfigParser;
 import com.sandrew.bury.configuration.Configuration;

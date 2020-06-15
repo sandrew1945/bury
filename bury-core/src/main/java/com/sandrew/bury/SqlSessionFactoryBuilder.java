@@ -12,13 +12,13 @@ import java.io.InputStream;
 public class SqlSessionFactoryBuilder
 {
 
-    SqlSessionFactory build(String resource)
+    public SqlSessionFactory build(String resource)
     {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(resource);
         return build(is);
     }
 
-    SqlSessionFactory build(InputStream is)
+    public SqlSessionFactory build(InputStream is)
     {
         ConfigParser parser = new XMLConfigParser();
         Configuration configuration = parser.parse(is);

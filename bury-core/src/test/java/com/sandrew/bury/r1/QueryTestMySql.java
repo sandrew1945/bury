@@ -1,5 +1,8 @@
-package com.sandrew.bury;
+package com.sandrew.bury.r1;
 
+import com.sandrew.bury.Session;
+import com.sandrew.bury.SqlSessionFactory;
+import com.sandrew.bury.SqlSessionFactoryBuilder;
 import com.sandrew.bury.model.TmUserPO;
 import org.junit.Test;
 

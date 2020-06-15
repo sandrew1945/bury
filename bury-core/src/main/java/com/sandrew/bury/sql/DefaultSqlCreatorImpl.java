@@ -21,6 +21,7 @@
 package com.sandrew.bury.sql;
 
 
+import com.sandrew.bury.bean.CommonPack;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.util.POUtil;
@@ -157,17 +158,17 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 	private String whereCreator(POMapping mapping, PO po) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
 		StringBuilder sql = new StringBuilder();
-		sql.append(" Where 1 = 1");
+		sql.append(" WHERE 1 = 1");
 		// 循环遍历PO的属性，生成AND条件
 		for (int i = 0; i < mapping.getColSize(); i++)
 		{
 			// 如果PO此属性不为null，则添加AND添件
 			// 获取此属性字段的get方法
-			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			CommonPack value = (CommonPack) POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
 			//Object value = getMethod.invoke(po, new Object[0]);
-			if (null != value)
+			if (null != value.getValue())
 			{
-				sql.append(" AND ").append(mapping.getColName(i)).append(" = ?");
+				sql.append(" AND ").append(value.toSql(mapping.getColName(i)));
 			}
 		}
 		return sql.toString();
@@ -239,8 +240,8 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		{
 			// 如果PO此属性不为null，则添加
 			// 获取此属性字段的get方法
-			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
-			if (null != value)
+			CommonPack value = (CommonPack) POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			if (null != value.getValue())
 			{
 				sql.append(mapping.getColName(i)).append(",");
 				insertValCount ++;

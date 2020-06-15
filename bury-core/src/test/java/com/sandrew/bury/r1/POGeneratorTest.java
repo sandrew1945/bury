@@ -1,4 +1,4 @@
-package com.sandrew.bury;
+package com.sandrew.bury.r1;
 
 import com.sandrew.bury.util.POGenerator;
 import org.junit.Test;

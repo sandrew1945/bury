@@ -1,12 +1,13 @@
-package com.sandrew.bury;
+package com.sandrew.bury.r1;
 
-import com.sandrew.bury.generator.*;
+import com.sandrew.bury.generator.POConfig;
+import com.sandrew.bury.generator.POConfigParser;
+import com.sandrew.bury.generator.XmlPOConfigParser;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.List;
 
-public class GenParseTableTest
+public class GenParsePOConfTest
 {
 
 	@Test
@@ -19,9 +20,6 @@ public class GenParseTableTest
 			POConfigParser parser = new XmlPOConfigParser();
 			POConfig config = parser.parser();
 			System.out.println(config);
-			DefaultTableParser tableParser = new DefaultTableParser();
-			List<Table> tables = tableParser.parserTable(config);
-			System.out.println(tables);
 		}
 		catch (Exception e)
 		{
