@@ -148,7 +148,8 @@ public class POUtil
 			{
 				sB.append('_');
 			}
-			sB.append(Character.toUpperCase(c));
+			// todo 临时解决POCallback使用自定义bean时，在mysql中字段名为大写的bug，需要再完善一下
+			sB.append(Character.toLowerCase(c));
 		}
 		return sB.toString();
 	}
