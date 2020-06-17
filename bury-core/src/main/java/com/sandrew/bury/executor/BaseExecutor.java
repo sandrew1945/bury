@@ -7,6 +7,7 @@ import com.sandrew.bury.common.POTypes;
 import com.sandrew.bury.exception.POException;
 import com.sandrew.bury.lob.extractor.NativeJdbcExtractor;
 import com.sandrew.bury.transaction.Transaction;
+import com.sandrew.bury.util.BatchParameter;
 import com.sandrew.bury.util.BuryConstants;
 import com.sandrew.bury.util.POUtil;
 import org.slf4j.Logger;
@@ -18,10 +19,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by summer on 2019/5/29.
@@ -192,6 +190,48 @@ public class BaseExecutor implements Executor
         }
     }
 
+    @Override
+    public int[] insertBatch(String sql, List<BatchParameter> params)
+    {
+        logger.debug("SQL =====>" + sql);
+        PreparedStatement ps = null;
+        try
+        {
+            Connection conn = transaction.getConnection();
+            ps = conn.prepareStatement(sql);
+            Iterator<BatchParameter> it = params.iterator();
+            while (it.hasNext())
+            {
+                BatchParameter param = it.next();
+                while (param.hasNext())
+                {
+                    setParam(ps, param.getIndex(), param.getValue());
+                }
+                ps.addBatch();
+            }
+            return ps.executeBatch();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new POException("update error!");
+        }
+        finally
+        {
+            try
+            {
+                if (null != ps)
+                {
+                    ps.clearBatch();
+                }
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+            closeResultSetAndStatment(null, ps);
+        }
+    }
 
     @Override
     public void commit() throws SQLException

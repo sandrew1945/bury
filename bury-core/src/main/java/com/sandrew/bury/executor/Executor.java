@@ -2,6 +2,7 @@ package com.sandrew.bury.executor;
 
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.callback.DAOCallback;
+import com.sandrew.bury.util.BatchParameter;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -37,6 +38,14 @@ public interface Executor
      * @return
      */
     int update(String sql, List<Object> params, PO po);
+
+    /**
+     *  批量新增
+     * @param sql
+     * @param params
+     * @return
+     */
+    int[] insertBatch(String sql, List<BatchParameter> params);
 
     /**
      *  提交
