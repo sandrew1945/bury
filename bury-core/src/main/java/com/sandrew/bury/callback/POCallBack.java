@@ -28,6 +28,7 @@ import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.exception.POException;
 import com.sandrew.bury.util.POUtil;
+import org.apache.commons.collections.map.CaseInsensitiveMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +38,6 @@ import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -143,7 +143,8 @@ public class POCallBack<T extends PO> implements DAOCallback<T>
 	 */
 	private Map<String, Object> getResultMap(ResultSet rs) throws SQLException
 	{
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+		// 使用CaseInsensitiveMap忽略key的大小写，避免因数据库不同而区分大小写，引起的无法取到值的问题
+		Map<String, Object> resultMap = new CaseInsensitiveMap();
 		ResultSetMetaData meta = rs.getMetaData();
 		for (int i = 1; i <= meta.getColumnCount(); i++)
 		{
