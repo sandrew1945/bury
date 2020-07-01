@@ -77,7 +77,7 @@ public class POCallBack<T extends PO> implements DAOCallback<T>
 					 *   如果model类型为Integer,ResultSet中类型为BigDecimal,那么转为Integer
 					 */
 					value = handleOracleNumber(mapping, i, value);
-					POUtil.invokeSetMethodByField(po, mapping.getPropertyName(i), value);
+					POUtil.invokeSetMethodByField(po, mapping.getPropertyName(i), mapping.getColType(i), value);
 				}
 			}
 			return po;

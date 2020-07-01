@@ -220,9 +220,9 @@ public abstract class DefaultSession implements Session
         for (Field field : fields)
         {
             ColumnName columeName = field.getAnnotation(ColumnName.class);
-            if (columeName.isPK() != true)
+            if (null != columeName && columeName.isPK() != true)
             {
-                POUtil.invokeSetMethodByField((PO) t, field.getName(), null);
+                POUtil.invokeSetMethodByField((PO) t, field.getName(), field.getType(), null);
             }
         }
 

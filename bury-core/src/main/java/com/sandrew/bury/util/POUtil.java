@@ -212,14 +212,15 @@ public class POUtil
 		return value;
 	}
 
+
 	/**
-	 * 
+	 *
 	 * Function    : 通过PO的属性调用SetXXX方法
 	 * LastUpdate  : 2010-8-20
 	 * @param fieldName
 	 * @return
 	 */
-	public static Object invokeSetMethodByField(PO po, String fieldName, Object setValue)
+	public static Object invokeSetMethodByField(PO po, String fieldName, Class fieldClass, Object setValue)
 	{
 		Object value = null;
 		Class<?> cls = po.getClass();
@@ -227,7 +228,11 @@ public class POUtil
 		Method meth = null;
 		try
 		{
-			meth = cls.getMethod(methodName, cls.getDeclaredField(fieldName).getType());
+			if (null == fieldClass)
+			{
+				fieldClass = cls.getDeclaredField(fieldName).getType();
+			}
+			meth = cls.getMethod(methodName, fieldClass);
 			Object[] arglist = new Object[] { setValue };
 			value = meth.invoke(po, arglist);
 		}

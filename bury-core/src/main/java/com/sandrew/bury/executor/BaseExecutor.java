@@ -170,7 +170,7 @@ public class BaseExecutor implements Executor
                         if ((true == columnName.autoIncrement()) && (null == POUtil.invokeGetMethodByField(po, fields[i].getName())))
                         {
                             int incrementKey = rs.getInt(columnIndex);
-                            POUtil.invokeSetMethodByField(po, fields[i].getName(), incrementKey);
+                            POUtil.invokeSetMethodByField(po, fields[i].getName(), fields[i].getType(), incrementKey);
                             columnIndex++;
                         }
                     }
