@@ -94,7 +94,7 @@ public class DefaultTableParser
 			}
 			DefaultClassMaker maker = new DefaultClassMaker();
 			// 根据字段的属性获取字段类型
-			Class<?> cls = maker.getJavaType(colName, colType, precision, scale);
+			Class<?> cls = maker.getJavaType(colName, colType, precision, scale, meta.isSigned(i));
 			field.setFieldName(colName);
 			field.setAttributeName(POUtil.getAttributeNameByFieldName(colName));
 			field.setFieldType(cls);

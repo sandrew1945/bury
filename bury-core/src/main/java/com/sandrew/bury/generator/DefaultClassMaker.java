@@ -43,7 +43,7 @@ public class DefaultClassMaker
 	 * @see com.autosys.po3.table.ClassMaker#getJavaType(java.lang.String, int,
 	 *      int, int)
 	 */
-	public Class<?> getJavaType(String colName, int colType, int colPrecision, int colScale) throws Exception
+	public Class<?> getJavaType(String colName, int colType, int colPrecision, int colScale, boolean isSigned) throws Exception
 	{
 		Class cls = null;
 		switch (colType)
@@ -89,7 +89,14 @@ public class DefaultClassMaker
 				cls = Float.class;
 				break;
 			case Types.INTEGER:
-				cls = Integer.class;
+				if (isSigned)
+				{
+					cls = Integer.class;
+				}
+				else
+				{
+					cls = Long.class;
+				}
 				break;
 			case Types.JAVA_OBJECT:
 				break;
