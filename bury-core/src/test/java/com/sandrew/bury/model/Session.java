@@ -7,6 +7,7 @@ import com.sandrew.bury.annotations.ColumnName;
 import com.sandrew.bury.annotations.TableName;
 import com.sandrew.bury.bean.CommonPack;
 import com.sandrew.bury.bean.PO;
+import com.sandrew.bury.bean.Pack;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -21,110 +22,135 @@ public class Session extends PO
     }
 
     @ColumnName(value = "session_id", isPK = true, autoIncrement = false)
-    private CommonPack<String> sessionId = new CommonPack<>();
+    private Pack<String> sessionId;
 
     @ColumnName(value = "session", isPK = false, autoIncrement = false)
-    private CommonPack<String> session = new CommonPack<>();
+    private Pack<String> session;
 
     @ColumnName(value = "create_by", isPK = false, autoIncrement = false)
-    private CommonPack<Integer> createBy = new CommonPack<>();
+    private Pack<Integer> createBy;
 
     @ColumnName(value = "create_date", isPK = false, autoIncrement = false)
-    private CommonPack<Date> createDate = new CommonPack<>();
+    private Pack<Date> createDate;
 
     @ColumnName(value = "update_by", isPK = false, autoIncrement = false)
-    private CommonPack<Integer> updateBy = new CommonPack<>();
+    private Pack<Integer> updateBy;
 
     @ColumnName(value = "update_date", isPK = false, autoIncrement = false)
-    private CommonPack<Date> updateDate = new CommonPack<>();
+    private Pack<Date> updateDate;
 
 
     public void setSessionId(String sessionId)
     {
+        if (null == this.sessionId)
+        {
+            this.sessionId = new CommonPack<String>();
+        }
         this.sessionId.setValue(sessionId);
     }
 
     public void setSession(String session)
     {
+        if (null == this.session)
+        {
+            this.session = new CommonPack<String>();
+        }
         this.session.setValue(session);
     }
 
     public void setCreateBy(Integer createBy)
     {
+        if (null == this.createBy)
+        {
+            this.createBy = new CommonPack<Integer>();
+        }
         this.createBy.setValue(createBy);
     }
 
     public void setCreateDate(Date createDate)
     {
+        if (null == this.createDate)
+        {
+            this.createDate = new CommonPack<Date>();
+        }
         this.createDate.setValue(createDate);
     }
 
     public void setUpdateBy(Integer updateBy)
     {
+        if (null == this.updateBy)
+        {
+            this.updateBy = new CommonPack<Integer>();
+        }
         this.updateBy.setValue(updateBy);
     }
 
     public void setUpdateDate(Date updateDate)
     {
+        if (null == this.updateDate)
+        {
+            this.updateDate = new CommonPack<Date>();
+        }
         this.updateDate.setValue(updateDate);
     }
 
-    public void setSessionId(CommonPack<String> sessionId)
+
+    public void setSessionId(Pack<String> sessionId)
     {
         this.sessionId = sessionId;
     }
 
-    public CommonPack<String> getSessionId()
+    public Pack<String> getSessionId()
     {
         return sessionId;
     }
 
-    public CommonPack<String> getSession()
+    public Pack<String> getSession()
     {
         return session;
     }
 
-    public void setSession(CommonPack<String> session)
+    public void setSession(Pack<String> session)
     {
         this.session = session;
     }
 
-    public CommonPack<Integer> getCreateBy()
+    public Pack<Integer> getCreateBy()
     {
         return createBy;
     }
 
-    public void setCreateBy(CommonPack<Integer> createBy)
+    public void setCreateBy(Pack<Integer> createBy)
     {
         this.createBy = createBy;
     }
 
-    public CommonPack<Date> getCreateDate()
+    public Pack<Date> getCreateDate()
     {
         return createDate;
     }
 
-    public void setCreateDate(CommonPack<Date> createDate)
+    public void setCreateDate(Pack<Date> createDate)
     {
         this.createDate = createDate;
     }
 
-    public CommonPack<Integer> getUpdateBy()
+    public Pack<Integer> getUpdateBy()
     {
         return updateBy;
     }
 
-    public void setUpdateBy(CommonPack<Integer> updateBy)
+    public void setUpdateBy(Pack<Integer> updateBy)
     {
         this.updateBy = updateBy;
     }
 
-    public CommonPack<Date> getUpdateDate()
+    public Pack<Date> getUpdateDate()
     {
         return updateDate;
     }
 
-    public void setUpdateDate(CommonPack<Date> updateDate)
+    public void setUpdateDate(Pack<Date> updateDate)
     {
         this.updateDate = updateDate;
     }

@@ -21,8 +21,8 @@
 package com.sandrew.bury.sql;
 
 
-import com.sandrew.bury.bean.CommonPack;
 import com.sandrew.bury.bean.PO;
+import com.sandrew.bury.bean.Pack;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.util.POUtil;
 import org.slf4j.Logger;
@@ -164,11 +164,31 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		{
 			// 如果PO此属性不为null，则添加AND添件
 			// 获取此属性字段的get方法
-			CommonPack value = (CommonPack) POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
-			//Object value = getMethod.invoke(po, new Object[0]);
-			if (null != value.getValue())
+			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			if (value instanceof Pack)
 			{
-				sql.append(" AND ").append(value.toSql(mapping.getColName(i)));
+				Pack pack = (Pack) value;
+				if (null != pack)
+				{
+					if (null != pack.getValue())
+					{
+						sql.append(" AND ").append(pack.toSql(mapping.getColName(i)));
+					}
+					else
+					{
+						sql.append(" AND ").append(pack.toNullSql(mapping.getColName(i)));
+					}
+				}
+
+			}
+			else
+			{
+				// 兼容1.0版本
+				if (null != value)
+				{
+					sql.append(" AND ").append(mapping.getColName(i)).append(" = ?");
+
+				}
 			}
 		}
 		return sql.toString();
@@ -240,11 +260,25 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		{
 			// 如果PO此属性不为null，则添加
 			// 获取此属性字段的get方法
-			CommonPack value = (CommonPack) POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
-			if (null != value.getValue())
+
+			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			if (value instanceof Pack)
 			{
-				sql.append(mapping.getColName(i)).append(",");
-				insertValCount ++;
+				Pack pack = (Pack) value;
+				if (null != pack.getValue())
+				{
+					sql.append(mapping.getColName(i)).append(",");
+					insertValCount++;
+				}
+			}
+			else
+			{
+				// 兼容1.0版本
+				if (null != value)
+				{
+					sql.append(mapping.getColName(i)).append(",");
+					insertValCount++;
+				}
 			}
 		}
 		sql.deleteCharAt(sql.length() - 1);

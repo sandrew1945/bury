@@ -1,6 +1,32 @@
 package com.sandrew.bury.bean;
 
-public interface Pack<T>
+public abstract class Pack<T>
 {
-    String toSql(String columnName);
+    private T value;
+
+    public Pack()
+    {
+    }
+
+    public Pack(T value)
+    {
+        this.value = value;
+    }
+
+    public T getValue()
+    {
+        return value;
+    }
+
+    public void setValue(T value)
+    {
+        this.value = value;
+    }
+
+    public String toNullSql(String columnName)
+    {
+        return columnName + " is null";
+    }
+
+    public abstract String toSql(String columnName);
 }

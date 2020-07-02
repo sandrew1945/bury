@@ -1,17 +1,15 @@
 package com.sandrew.bury.bean;
 
-public class CommonPack<T> implements Pack
+public class CommonPack<T> extends Pack
 {
-    T value;
 
-    public T getValue()
+    public CommonPack()
     {
-        return this.value;
     }
 
-    public void setValue(T value)
+    public CommonPack(Object value)
     {
-        this.value = value;
+        super(value);
     }
 
     @Override
