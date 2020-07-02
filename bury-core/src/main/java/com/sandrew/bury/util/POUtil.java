@@ -24,6 +24,7 @@
 package com.sandrew.bury.util;
 
 
+import com.sandrew.bury.bean.AbstractIntervalPack;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.bean.Pack;
 import com.sandrew.bury.common.POMapping;
@@ -285,7 +286,14 @@ public class POUtil
 				if (value instanceof Pack)
 				{
 					Pack pack = (Pack) value;
-					if (null != pack.getValue())
+					// 特殊处理AbstractIntervalPack
+					if (value instanceof AbstractIntervalPack)
+					{
+						AbstractIntervalPack abstractIntervalPack = (AbstractIntervalPack) pack;
+						params.add(abstractIntervalPack.getValue());
+						params.add(abstractIntervalPack.getMax());
+					}
+					else if (null != pack.getValue())
 					{
 						params.add(pack.getValue());
 					}

@@ -1,13 +1,13 @@
 package com.sandrew.bury.bean;
 
-public class CommonPack<T> extends Pack
+public class GreaterPack<T> extends Pack
 {
 
-    public CommonPack()
+    public GreaterPack()
     {
     }
 
-    public CommonPack(T value)
+    public GreaterPack(T value)
     {
         super(value);
     }
@@ -15,6 +15,6 @@ public class CommonPack<T> extends Pack
     @Override
     public String toSql(String columnName)
     {
-        return columnName + " = ?";
+        return columnName + " > ?";
     }
 }
