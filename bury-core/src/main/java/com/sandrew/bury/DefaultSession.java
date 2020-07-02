@@ -11,12 +11,14 @@ import com.sandrew.bury.exception.POException;
 import com.sandrew.bury.executor.Executor;
 import com.sandrew.bury.sql.DefaultSqlCreatorImpl;
 import com.sandrew.bury.sql.SqlCreator;
+import com.sandrew.bury.util.BatchParameter;
 import com.sandrew.bury.util.POUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +60,39 @@ public abstract class DefaultSession implements Session
         // 封装参数List
         List<Object> params = POUtil.encapParams(mapping, po);
         return executor.update(sql, params, po);
+    }
+
+    @Override
+    public int[] insertForBatch(String sql, List<BatchParameter> parameters) throws POException
+    {
+        return executor.insertBatch(sql, parameters);
+    }
+
+    @Override
+    public int[] insert(List<? extends PO> poList) throws POException
+    {
+        if (null == poList || poList.size() == 0)
+        {
+            throw new POException("poList is null");
+        }
+        // 获取PO的POMapping
+        POMapping mapping = new POMapping(poList.get(0));
+        // 获取SQL
+        SqlCreator creator = new DefaultSqlCreatorImpl();
+        String sql = creator.insertCreator(mapping, poList.get(0));
+        List<BatchParameter> parameters = new ArrayList<>();
+        BatchParameter parameter = null;
+        for (PO po : poList)
+        {
+            parameter = new BatchParameter();
+            List<Object> params = POUtil.encapParams(mapping, po);
+            for (Object param : params)
+            {
+                parameter.add(param);
+            }
+            parameters.add(parameter);
+        }
+        return insertForBatch(sql, parameters);
     }
 
     @Override
@@ -185,13 +220,13 @@ public abstract class DefaultSession implements Session
         for (Field field : fields)
         {
             ColumnName columeName = field.getAnnotation(ColumnName.class);
-            if (columeName.isPK() != true)
+            if (null != columeName && columeName.isPK() != true)
             {
-                POUtil.invokeSetMethodByField((PO)t, field.getName(), null);
+                POUtil.invokeSetMethodByField((PO) t, field.getName(), field.getType(), null);
             }
         }
 
-        List<T> list = select((PO)t);
+        List<T> list = select((PO) t);
         if (null != list && list.size() > 0)
         {
             return list.get(0);
@@ -221,8 +256,8 @@ public abstract class DefaultSession implements Session
     }
 
     /* (non-Javadoc)
-	 * @see com.autosys.po3.Session#getIntegerPK(java.lang.String)
-	 */
+     * @see com.autosys.po3.Session#getIntegerPK(java.lang.String)
+     */
     public Integer getIntegerPK(String sequenceName) throws POException
     {
         return new Integer(getStringPK(sequenceName));
@@ -245,10 +280,11 @@ public abstract class DefaultSession implements Session
     }
 
     public abstract Object getPK(String sequenceName) throws POException;
+
     /**
-     *
      * Function    : 获取查询的记录数
      * LastUpdate  : 2010-6-10
+     *
      * @param sql
      * @param params
      * @return

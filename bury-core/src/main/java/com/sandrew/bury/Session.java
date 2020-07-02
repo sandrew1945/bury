@@ -4,6 +4,7 @@ import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.bean.PageResult;
 import com.sandrew.bury.callback.DAOCallback;
 import com.sandrew.bury.exception.POException;
+import com.sandrew.bury.util.BatchParameter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,14 +42,21 @@ public interface Session
     int insert(PO po) throws POException;
 
     /**
-     *
-     * Function    : 批量插入
+     * 批量插入
      * @param sql
      * @param parameters
      * @return
      * @throws POException
      */
-    //int[] insertForBatch(String sql, List<Parameters> parameters) throws POException;
+    int[] insertForBatch(String sql, List<BatchParameter> parameters) throws POException;
+
+    /**
+     *   批量插入
+     * @param poList
+     * @return
+     * @throws POException
+     */
+    int[] insert(List<? extends PO> poList) throws POException;
 
     /**
      *
