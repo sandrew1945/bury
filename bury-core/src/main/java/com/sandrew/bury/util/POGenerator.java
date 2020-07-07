@@ -85,6 +85,16 @@ public class POGenerator
 
 	public void gen(String poConfigPath) throws Exception
 	{
+		doGenerat(poConfigPath, "POTemplate.vm");
+	}
+
+	public void genForPack(String poConfigPath) throws Exception
+	{
+		doGenerat(poConfigPath, "POTemplateForPack.vm");
+	}
+
+	private void doGenerat(String poConfigPath, String templateName) throws Exception
+	{
 		String configFile = poConfigPath == null ? "POConf.xml" : poConfigPath;
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream(configFile);
 		POConfigParser parser = new XmlPOConfigParser();
@@ -94,7 +104,7 @@ public class POGenerator
 		List<Table> tables = tableParser.parserTable(config);
 
 
-		Template template = ve.getTemplate("templates/POTemplate.vm", CONTENT_ENCODING);
+		Template template = ve.getTemplate("templates/" + templateName, CONTENT_ENCODING);
 		// 处理生成绝对路径,如果以文件分隔符结尾那么不处理,否则增加文件分隔符
 		String genPOPath = config.getGenPoPath().endsWith(File.separator) ? config.getGenPoPath() : (config.getGenPoPath() + File.separator);
 		for (Table table : tables)

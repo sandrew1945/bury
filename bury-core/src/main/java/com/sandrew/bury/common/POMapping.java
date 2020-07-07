@@ -157,13 +157,4 @@ public class POMapping
         return propertyNames.get(idx);
     }
 
-    /**
-     * Function    :
-     * LastUpdate  : 2010-8-30
-     * @param args
-     */
-    public static void main(String[] args)
-    {
-
-    }
 }

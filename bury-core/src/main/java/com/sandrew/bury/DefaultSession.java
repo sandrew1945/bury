@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -214,7 +215,7 @@ public abstract class DefaultSession implements Session
     }
 
     @Override
-    public <T> T selectById(T t) throws POException
+    public <T extends PO> T selectById(T t) throws POException
     {
         Field[] fields = t.getClass().getDeclaredFields();
         for (Field field : fields)
@@ -222,11 +223,23 @@ public abstract class DefaultSession implements Session
             ColumnName columeName = field.getAnnotation(ColumnName.class);
             if (null != columeName && columeName.isPK() != true)
             {
-                POUtil.invokeSetMethodByField((PO) t, field.getName(), field.getType(), null);
+//                POUtil.invokeSetMethodByField(t, field.getName(), field.getType(), null);
+                Class<?> cls = t.getClass();
+                String methodName = POUtil.getMethodOfSetByFieldName(field.getName());
+                Method meth = null;
+                try
+                {
+                    meth = cls.getMethod(methodName, field.getType());
+                    Object[] arglist = new Object[] { null };
+                    meth.invoke(t, arglist);
+                }
+                catch (Exception e)
+                {
+                    throw new POException("select error", e);
+                }
             }
         }
-
-        List<T> list = select((PO) t);
+        List<T> list = select(t);
         if (null != list && list.size() > 0)
         {
             return list.get(0);

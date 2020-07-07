@@ -237,12 +237,30 @@ public class POUtil
 			}
 //			meth = cls.getMethod(methodName, fieldClass);
 
-
 			if (fieldClass.equals(Pack.class))
 			{
-				// release.2 支持PO字段为CommonPack类型字段,获取CommonPack泛型类型
+				// release.2 支持PO字段为Pack类型字段,获取Pack泛型类型
 				Field field = cls.getDeclaredField(fieldName);
-				meth = cls.getMethod(methodName, Class.forName(((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0].getTypeName()));
+				String originTypeName = ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0].getTypeName();
+				Class paramType = null;
+				// TODO not graceful :(
+				if (originTypeName.endsWith("[]"))
+				{
+					// 单独处理大对象的情况
+					if (originTypeName.equals("byte[]"))
+					{
+						paramType = Class.forName("[B");
+					}
+					else
+					{
+						throw new RuntimeException("调用" + po.getClass().getSimpleName() + "." + meth.getName() + "方法失败，不支持的原始数据类型:" + originTypeName);
+					}
+				}
+				else
+				{
+					paramType = Class.forName(originTypeName);
+				}
+				meth = cls.getMethod(methodName, paramType);
 			}
 			else
 			{
@@ -250,8 +268,6 @@ public class POUtil
 				//meth = cls.getMethod(methodName, cls.getDeclaredField(fieldName).getType());
 				meth = cls.getMethod(methodName, fieldClass);
 			}
-
-
 
 			Object[] arglist = new Object[] { setValue };
 			value = meth.invoke(po, arglist);
@@ -415,6 +431,13 @@ public class POUtil
 
 	public static void main(String[] args)
 	{
-		System.out.println(getColNameByFieldName("vehicleId"));
+		try
+		{
+			Class clz = Class.forName("java.lang.Byte[]");
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,12 +1,11 @@
-package com.sandrew.bury.r1;
+package com.sandrew.bury.r2;
 
 import com.sandrew.bury.Session;
 import com.sandrew.bury.SqlSessionFactory;
 import com.sandrew.bury.SqlSessionFactoryBuilder;
-import com.sandrew.bury.model.SessionPO;
 import org.junit.Test;
 
-public class QueryByIdTest
+public class QueryTestById
 {
 
 	@Test
@@ -18,11 +17,10 @@ public class QueryByIdTest
 		Session session = factory.openSession();
 		try
 		{
-			SessionPO po = new SessionPO();
-			po.setSessionId("1");
-			SessionPO value = session.selectById(po);
+			// 2.0版本查询
+			com.sandrew.bury.model.Session se = new com.sandrew.bury.model.Session("1");
+			com.sandrew.bury.model.Session value = session.selectById(se);
 			System.out.println(value);
-
 		}
 		catch (Exception e)
 		{
@@ -32,6 +30,7 @@ public class QueryByIdTest
 		{
 			session.close();
 		}
+		
 	}
 
 

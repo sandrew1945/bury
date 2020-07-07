@@ -3,7 +3,7 @@ package com.sandrew.bury.r2;
 import com.sandrew.bury.Session;
 import com.sandrew.bury.SqlSessionFactory;
 import com.sandrew.bury.SqlSessionFactoryBuilder;
-import com.sandrew.bury.bean.CommonPack;
+import com.sandrew.bury.bean.EqualPack;
 import com.sandrew.bury.model.SessionPO;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class InsertTestMySql
 			com.sandrew.bury.model.Session se = new com.sandrew.bury.model.Session();
 			se.setSessionId("3");
 			se.setSession("qweqweqweqwe");
-			se.setCreateBy(new CommonPack<Integer>(-1));
+			se.setCreateBy(new EqualPack<Integer>(-1));
 			se.setCreateDate(new Date());
 			session.insert(se);
 

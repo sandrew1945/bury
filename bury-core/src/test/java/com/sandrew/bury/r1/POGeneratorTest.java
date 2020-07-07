@@ -13,7 +13,7 @@ public class POGeneratorTest
 		{
 			String configFile = "POConf.xml";
 			POGenerator poGenerator = new POGenerator();
-			poGenerator.gen("POConf.xml");
+			poGenerator.genForPack("POConf.xml");
 		}
 		catch (Exception e)
 		{

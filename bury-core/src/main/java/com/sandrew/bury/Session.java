@@ -171,7 +171,7 @@ public interface Session
      * @return
      * @throws POException
      */
-    <T> T selectById(T t) throws POException;
+    <T extends PO> T selectById(T t) throws POException;
 
     /**
      *
