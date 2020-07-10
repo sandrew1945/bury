@@ -275,7 +275,7 @@ public class POUtil
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new RuntimeException("调用" + po.getClass().getSimpleName() + "." + meth.getName() + "方法失败", e);
+			throw new RuntimeException("调用" + po.getClass().getSimpleName() + "." + meth + "方法失败, 参数:" + setValue.getClass() + "[" + setValue + "]", e);
 		}
 		return value;
 	}
