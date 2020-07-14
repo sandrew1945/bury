@@ -30,13 +30,12 @@ import com.sandrew.bury.bean.Pack;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.exception.POException;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -239,7 +238,7 @@ public class POUtil
 
 			if (fieldClass.equals(Pack.class))
 			{
-				// release.2 支持PO字段为Pack类型字段,获取Pack泛型类型
+				/*
 				Field field = cls.getDeclaredField(fieldName);
 				String originTypeName = ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0].getTypeName();
 				Class paramType = null;
@@ -259,6 +258,15 @@ public class POUtil
 				else
 				{
 					paramType = Class.forName(originTypeName);
+				}
+				*/
+				// release.2 支持PO字段为Pack类型字段,获取Pack泛型类型
+				// 放弃根据泛行获取实际类型的方式，根据参数来判断类型
+				Class paramType = setValue.getClass();
+				if (paramType.equals(Timestamp.class))
+				{
+					// 特殊处理时间类型
+					paramType = Date.class;
 				}
 				meth = cls.getMethod(methodName, paramType);
 			}

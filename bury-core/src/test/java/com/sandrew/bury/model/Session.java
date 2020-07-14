@@ -9,8 +9,6 @@ import com.sandrew.bury.bean.EqualPack;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.bean.Pack;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Date;
 
 @TableName("tt_session")
@@ -164,15 +162,4 @@ public class Session extends PO
         this.updateDate = updateDate;
     }
 
-
-
-    public static void main(String[] args)
-    {
-        EqualPack<String> foo = new EqualPack<String>(){};
-        // 在类的外部这样获取
-        Type type = ((ParameterizedType)foo.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        System.out.println(type);
-        // 在类的内部这样获取
-        //System.out.println(foo.getTClass());
-    }
 }
