@@ -20,7 +20,7 @@ public class TtTest extends PO
     }
 
 
-                
+                    
     public TtTest(Integer id)
     {
         if (null == this.id)
@@ -35,6 +35,9 @@ public class TtTest extends PO
 
     @ColumnName(value = "sd", isPK = false, autoIncrement = false)
     private Pack<Integer> sd;
+
+    @ColumnName(value = "has_info", isPK = false, autoIncrement = false)
+    private Pack<Boolean> hasInfo;
 
     @ColumnName(value = "file", isPK = false, autoIncrement = false)
     private Pack<byte[]> file;
@@ -54,9 +57,9 @@ public class TtTest extends PO
         this.id = id;
     }
         
-    public Pack<Integer> getId()
+    public Integer getId()
     {
-        return this.id;
+        return this.id == null ? null : this.id.getValue();
     }
 
     public void setSd(Integer sd)
@@ -73,9 +76,28 @@ public class TtTest extends PO
         this.sd = sd;
     }
         
-    public Pack<Integer> getSd()
+    public Integer getSd()
     {
-        return this.sd;
+        return this.sd == null ? null : this.sd.getValue();
+    }
+
+    public void setHasInfo(Boolean hasInfo)
+    {
+        if (null == this.hasInfo)
+        {
+            this.hasInfo = new EqualPack<Boolean>();
+        }
+        this.hasInfo.setValue(hasInfo);
+    }
+
+    public void setHasInfo(Pack<Boolean> hasInfo)
+    {
+        this.hasInfo = hasInfo;
+    }
+        
+    public Boolean getHasInfo()
+    {
+        return this.hasInfo == null ? null : this.hasInfo.getValue();
     }
 
     public void setFile(byte[] file)
@@ -92,9 +114,9 @@ public class TtTest extends PO
         this.file = file;
     }
         
-    public Pack<byte[]> getFile()
+    public byte[] getFile()
     {
-        return this.file;
+        return this.file == null ? null : this.file.getValue();
     }
 
 }

@@ -19,9 +19,9 @@ public class QueryTestWithBlobMySql
 		try
 		{
 			// 2.0版本查询
-			TtTest ttTest = session.selectById(new TtTest(1));
-			System.out.println(ttTest);
-			System.out.println(ttTest.getFile().getValue().length);
+			TtTest ttTest = session.selectById(new TtTest(12));
+			System.out.println(ttTest.getHasInfo());
+			System.out.println(ttTest.getFile());
 			//session.commit();
 		}
 		catch (Exception e)

@@ -81,9 +81,9 @@ public class ${className} extends PO
         #set( $get = "is")
     #end
 
-    public Pack<$item.type> $get$start$str()
+    public $item.type $get$start$str()
     {
-        return this.$item.poName;
+        return this.$item.poName == null ? null : this.$!{item.poName}.getValue();
     }
 
 #end
