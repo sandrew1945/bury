@@ -263,7 +263,7 @@ public class POUtil
 				// release.2 支持PO字段为Pack类型字段,获取Pack泛型类型
 				// 放弃根据泛行获取实际类型的方式，根据参数来判断类型
 				Class paramType = setValue.getClass();
-				if (paramType.equals(Timestamp.class))
+				if (paramType.equals(Timestamp.class) || paramType.equals(java.sql.Date.class))
 				{
 					// 特殊处理时间类型
 					paramType = Date.class;
