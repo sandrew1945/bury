@@ -26,7 +26,7 @@ public class BatchInsertPOTest
                 for (int i = 0; i < 10; i++)
                 {
                     UORelTab uoRelTab = new UORelTab();
-                    uoRelTab.setItemId(i + 100);
+                    uoRelTab.setItemId(i + 10000);
                     uoRelTab.setUoId(i+1);
                     list.add(uoRelTab);
                 }

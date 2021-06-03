@@ -30,6 +30,7 @@ import com.sandrew.bury.bean.Pack;
 import com.sandrew.bury.common.POMapping;
 import com.sandrew.bury.exception.POException;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -212,6 +213,32 @@ public class POUtil
 			throw new RuntimeException("调用" + po.getClass().getSimpleName() + meth.getName() + "方法失败", e);
 		}
 		return value;
+	}
+
+	/**
+	 *  通过反射获取PO中字段的值
+	 * @param po
+	 * @param fieldName
+	 * @return
+	 */
+	public static Object reflectGetByField(PO po, String fieldName)
+	{
+		try
+		{
+			Field field = po.getClass().getDeclaredField(fieldName);
+			//设置对象的访问权限，保证对private的属性的访问
+			field.setAccessible(true);
+			return field.get(po);
+		}
+		catch (NoSuchFieldException e)
+		{
+			throw new RuntimeException("获取" + po.getClass().getSimpleName() + "字段" + fieldName + "的值失败", e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new RuntimeException("获取" + po.getClass().getSimpleName() + "字段" + fieldName + "的值失败", e);
+		}
+
 	}
 
 
