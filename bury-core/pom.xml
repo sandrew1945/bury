@@ -79,6 +79,7 @@
     </dependencies>
 
     <build>
+        <finalName>bury-core</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -86,6 +87,17 @@
                 <configuration>
                     <source>${java.sdk.version}</source>
                     <target>${java.sdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <excludes>
+                        <!--注意这玩意从编译结果目录开始算目录结构-->
+                        <exclude>/**/*.xml</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
