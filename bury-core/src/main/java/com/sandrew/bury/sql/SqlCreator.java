@@ -35,13 +35,15 @@ import com.sandrew.bury.common.POMapping;
  */
 public interface SqlCreator
 {
-	public String selectCreator(POMapping mapping, PO po);
+	String selectCreator(POMapping mapping, PO po);
 
-	public String updateCreator(POMapping mapping, PO cond, PO value);
+	String updateCreator(POMapping mapping, PO cond, PO value);
 
-	public String deleteCreator(POMapping mapping, PO po);
+	String deleteCreator(POMapping mapping, PO po);
 
-	public String insertCreator(POMapping mapping, PO po);
+	String insertCreator(POMapping mapping, PO po);
 
-	public String selectCreatorForOrder(POMapping mapping, PO po, String order, String... colName);
+	String insertAllCreator(POMapping mapping, PO po);
+
+	String selectCreatorForOrder(POMapping mapping, PO po, String order, String... colName);
 }

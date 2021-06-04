@@ -28,11 +28,14 @@ public class QueryTestMySql
 			se.setSessionId("1");
 			se.setSession("qweqweqweqwe");
 			se.setCreateBy(new EqualPack(null));
+			se.setUpdateBy(-1);
 //			se.setCreateDate(new Date());
 //			session.insert(se);
 			List<com.sandrew.bury.model.Session> list = session.select(se);
 			list.stream().forEach(item -> {
-				System.out.println(item);
+				System.out.println(item.getSessionId().getValue());
+				System.out.println(item.getSession().getValue());
+				System.out.println(item.getCreateBy().getValue());
 			});
 
 			// 1.0版查询
@@ -59,12 +62,21 @@ public class QueryTestMySql
 			// 2.0between查询
 			com.sandrew.bury.model.Session se3 = new com.sandrew.bury.model.Session();
 			se3.setSessionId(new GreaterLessEqualPack<String>("1", "3"));
-			se3.setSession("ndiniannsadasdasd");
+			se3.setSession("qweqweqweqwe");
 			List<com.sandrew.bury.model.Session> list4 = session.select(se3);
 			list4.stream().forEach(item -> {
 				System.out.println(item.getSessionId().getValue());
 				System.out.println(item.getSession().getValue());
 			});
+
+			// 2.0 null字段查询
+//			com.sandrew.bury.model.Session se4 = new com.sandrew.bury.model.Session();
+//			se4.setUpdateDate(new EqualPack<Date>(null));
+//			List<com.sandrew.bury.model.Session> list5 = session.select(se4);
+//			list5.stream().forEach(item -> {
+//				System.out.println(item.getSessionId().getValue());
+//				System.out.println(item.getSession().getValue());
+//			});
 			//session.commit();
 		}
 		catch (Exception e)

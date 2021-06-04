@@ -27,6 +27,7 @@ public class InsertTestMySql
 			se.setSession("qweqweqweqwe");
 			se.setCreateBy(new EqualPack<Integer>(-1));
 			se.setCreateDate(new Date());
+			se.setUpdateDate(new EqualPack<Date>(null));
 			session.insert(se);
 
 			// 1.0版新增

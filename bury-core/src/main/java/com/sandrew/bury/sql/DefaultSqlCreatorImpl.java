@@ -75,6 +75,17 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		return sql.toString();
 	}
 
+	@Override
+	public String insertAllCreator(POMapping mapping, PO po)
+	{
+		StringBuilder sql = new StringBuilder();
+		// 生成insert语句前缀
+		sql.append(insertPrefixCreator(mapping.getTableName()));
+		// 生成insert语句后缀
+		sql.append(insertAllSuffixCreator(mapping, po));
+		return sql.toString();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.autosys.po3.sql.SqlCreator#selectCreator()
 	 */
@@ -164,7 +175,7 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		{
 			// 如果PO此属性不为null，则添加AND添件
 			// 获取此属性字段的get方法
-			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			Object value = POUtil.reflectGetByField(po, mapping.getPropertyName(i));
 			if (value instanceof Pack)
 			{
 				Pack pack = (Pack) value;
@@ -232,7 +243,7 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 
 	/**
 	 * 
-	 * Function    : 生成ORACLE形式的INSERT前缀
+	 * Function    : 生成通用格式的INSERT前缀
 	 * LastUpdate  : 2010-9-1
 	 * @param tabName
 	 * @return
@@ -244,7 +255,7 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 
 	/**
 	 * 
-	 * Function    : 生成ORACLE形式的INSERT后缀
+	 * Function    : 生成通用格式的INSERT后缀
 	 * LastUpdate  : 2010-9-1
 	 * @param mapping
 	 * @return
@@ -261,11 +272,11 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 			// 如果PO此属性不为null，则添加
 			// 获取此属性字段的get方法
 
-			Object value = POUtil.invokeGetMethodByField(po, mapping.getPropertyName(i));
+			Object value = POUtil.reflectGetByField(po, mapping.getPropertyName(i));
 			if (value instanceof Pack)
 			{
 				Pack pack = (Pack) value;
-				if (null != pack.getValue())
+				if (null != pack)
 				{
 					sql.append(mapping.getColName(i)).append(",");
 					insertValCount++;
@@ -280,6 +291,39 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 					insertValCount++;
 				}
 			}
+		}
+		sql.deleteCharAt(sql.length() - 1);
+		sql.append(") VALUES (");
+		for (int i = 0; i < insertValCount; i++)
+		{
+			if (i != 0)
+			{
+				sql.append(",");
+			}
+			sql.append("?");
+		}
+		sql.append(")");
+		return sql.toString();
+	}
+
+	/**
+	 *	生成全部字段插入的sql
+	 * @param mapping
+	 * @param po
+	 * @return
+	 */
+	private String insertAllSuffixCreator(POMapping mapping, PO po)
+	{
+		StringBuilder sql = new StringBuilder();
+		sql.append(" (");
+		Class<?> clz = po.getClass();
+		Field[] fields = clz.getDeclaredFields();
+		int insertValCount = 0;
+		for(int i = 0;i<fields.length;i++)
+		{
+			// 全部字段都添加
+			sql.append(mapping.getColName(i)).append(",");
+			insertValCount++;
 		}
 		sql.deleteCharAt(sql.length() - 1);
 		sql.append(") VALUES (");

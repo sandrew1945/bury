@@ -333,7 +333,7 @@ public class POUtil
 			{
 				// 如果PO此属性不为null，则添加AND添件
 				// 获取此属性字段的get方法
-				Object value = POUtil.invokeGetMethodByField(po[j], mapping.getPropertyName(i));
+				Object value = POUtil.reflectGetByField(po[j], mapping.getPropertyName(i));
 				if (value instanceof Pack)
 				{
 					Pack pack = (Pack) value;
@@ -344,7 +344,7 @@ public class POUtil
 						params.add(abstractIntervalPack.getValue());
 						params.add(abstractIntervalPack.getMax());
 					}
-					else if (null != pack.getValue())
+					else if (null != pack)
 					{
 						params.add(pack.getValue());
 					}
@@ -355,6 +355,55 @@ public class POUtil
 					if (null != value)
 					{
 						params.add(value);
+					}
+				}
+
+			}
+		}
+		return params;
+	}
+
+	/**
+	 *
+	 * Function    : 通过PO属性是来生成SQL参数(不论是否有值)
+	 * LastUpdate  : 2010-9-1
+	 * @param mapping
+	 * @param po
+	 * @return
+	 */
+	public static LinkedList<Object> encapAllParams(POMapping mapping, PO... po)
+	{
+		// 封装参数List
+		LinkedList<Object> params = new LinkedList<Object>();
+		for (int j = 0; j < po.length; j++)
+		{
+			for (int i = 0; i < mapping.getColSize(); i++)
+			{
+				// 如果PO此属性不为null，则添加AND添件
+				// 获取此属性字段的get方法
+				Object value = POUtil.reflectGetByField(po[j], mapping.getPropertyName(i));
+				if (value instanceof Pack)
+				{
+					Pack pack = (Pack) value;
+					if (null != pack)
+					{
+						params.add(pack.getValue());
+					}
+					else
+					{
+						params.add(null);
+					}
+				}
+				else
+				{
+					// 兼容1.0版本
+					if (null != value)
+					{
+						params.add(value);
+					}
+					else
+					{
+						params.add(null);
 					}
 				}
 

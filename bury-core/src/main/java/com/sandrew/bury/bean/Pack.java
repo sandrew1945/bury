@@ -25,7 +25,7 @@ public abstract class Pack<T>
 
     public String toNullSql(String columnName)
     {
-        return columnName + " is null";
+        return columnName + " is ?";
     }
 
     public abstract String toSql(String columnName);

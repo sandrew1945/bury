@@ -3,8 +3,8 @@ package com.sandrew.bury.r2;
 import com.sandrew.bury.Session;
 import com.sandrew.bury.SqlSessionFactory;
 import com.sandrew.bury.SqlSessionFactoryBuilder;
+import com.sandrew.bury.bean.EqualPack;
 import com.sandrew.bury.bean.GreaterEqualPack;
-import com.sandrew.bury.bean.GreaterPack;
 import com.sandrew.bury.model.SessionPO;
 import org.junit.Test;
 
@@ -22,14 +22,14 @@ public class DeleteTestMySql
 		{
 			// 2.0版删除
 			com.sandrew.bury.model.Session se = new com.sandrew.bury.model.Session();
-			se.setSessionId(new GreaterEqualPack<String>("2"));
-			se.setCreateBy(new GreaterPack<Integer>(10));
+			se.setSessionId(new GreaterEqualPack<String>("10"));
+			se.setCreateBy(new EqualPack(null));
 			session.delete(se);
 
 			// 1.0版删除
 			SessionPO sessionPO = new SessionPO();
-			sessionPO.setSessionId("1");
-			sessionPO.setSession("qweqweqweqwe");
+			sessionPO.setSessionId("qoweiqweuyqwemqweni");
+			sessionPO.setSession("111123");
 			session.delete(sessionPO);
 
 			session.commit();

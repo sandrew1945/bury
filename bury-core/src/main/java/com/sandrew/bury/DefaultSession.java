@@ -80,13 +80,14 @@ public abstract class DefaultSession implements Session
         POMapping mapping = new POMapping(poList.get(0));
         // 获取SQL
         SqlCreator creator = new DefaultSqlCreatorImpl();
-        String sql = creator.insertCreator(mapping, poList.get(0));
+        String sql = creator.insertAllCreator(mapping, poList.get(0));
         List<BatchParameter> parameters = new ArrayList<>();
         BatchParameter parameter = null;
         for (PO po : poList)
         {
             parameter = new BatchParameter();
-            List<Object> params = POUtil.encapParams(mapping, po);
+            List<Object> params = POUtil.encapAllParams(mapping, po);
+            logger.debug("params --> " + params);
             for (Object param : params)
             {
                 parameter.add(param);

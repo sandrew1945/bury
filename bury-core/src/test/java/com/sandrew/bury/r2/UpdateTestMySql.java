@@ -3,6 +3,7 @@ package com.sandrew.bury.r2;
 import com.sandrew.bury.Session;
 import com.sandrew.bury.SqlSessionFactory;
 import com.sandrew.bury.SqlSessionFactoryBuilder;
+import com.sandrew.bury.bean.EqualPack;
 import com.sandrew.bury.bean.GreaterLessEqualPack;
 import com.sandrew.bury.bean.GreaterPack;
 import org.junit.Test;
@@ -22,10 +23,11 @@ public class UpdateTestMySql
 			// 2.0版更新
 			com.sandrew.bury.model.Session cond = new com.sandrew.bury.model.Session();
 			cond.setSessionId(new GreaterLessEqualPack<String>("1", "3"));
+			cond.setUpdateDate(new EqualPack(null));
 
 			com.sandrew.bury.model.Session value = new com.sandrew.bury.model.Session();
 			value.setSession("99QMWIN9123-NASIQWE7-123ANSDU99");
-			value.setUpdateBy(new GreaterPack<Integer>(1));
+			value.setUpdateBy(new GreaterPack<Integer>(101));
 			session.update(cond, value);
 
 			// 1.0版更新
