@@ -354,11 +354,32 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 		for (int i = 0; i < fields.length; i++)
 		{
 			// 调用此字段的get方法
-			Object value = POUtil.invokeGetMethodByField(po, fields[i].getName());
-			if (null != value)
+//			Object value = POUtil.invokeGetMethodByField(po, fields[i].getName());
+//			if (null != value)
+//			{
+//				sql.append(mapping.getColName(i)).append(" = ?,");
+//			}
+
+			Object value = POUtil.reflectGetByField(po, mapping.getPropertyName(i));
+			if (value instanceof Pack)
 			{
-				sql.append(mapping.getColName(i)).append(" = ?,");
+				Pack pack = (Pack) value;
+				if (null != pack)
+				{
+					sql.append(mapping.getColName(i)).append(" = ?,");
+				}
 			}
+			else
+			{
+				// 兼容1.0版本
+				if (null != value)
+				{
+					sql.append(mapping.getColName(i)).append(" = ?,");
+				}
+			}
+
+
+
 		}
 		// 删除最后一个","
 		String sqlStr = sql.substring(0, sql.length() - 1);

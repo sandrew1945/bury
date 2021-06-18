@@ -7,7 +7,7 @@
     <groupId>com.sandrew</groupId>
     <artifactId>bury</artifactId>
     <packaging>pom</packaging>
-    <version>2.1</version>
+    <version>2.2</version>
     <modules>
         <module>bury-core</module>
         <module>bury-spring</module>
@@ -166,7 +166,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.3</version>
                 <configuration>
                     <source>${java.sdk.version}</source>
                     <target>${java.sdk.version}</target>
