@@ -38,6 +38,8 @@ public class ${className} extends PO
         #set( $params = "$params$item.type $item.poName," )
     #end
 #end
+#if($params.length() > 1)
+
 #set( $length=$params.length() - 1 )
 
     public ${className}($params.substring(0, $length))
@@ -52,6 +54,7 @@ public class ${className} extends PO
 #end
 #end
     }
+#end
 
 #foreach( $item in $!{columnDatas} )
     @ColumnName(value = "$item.colName", isPK = $item.pk, autoIncrement = $item.autoIncrement)
