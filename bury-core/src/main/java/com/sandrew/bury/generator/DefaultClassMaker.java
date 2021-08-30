@@ -166,6 +166,10 @@ public class DefaultClassMaker
 			{
 				return Long.class;
 			}
+			else
+			{
+				return BigDecimal.class;
+			}
 		}
 		else if (colScale > BuryConstants.JAVA_TYPE_SCALE_0 && colPrecision > BuryConstants.JAVA_TYPE_PRECISION_0)
 		{
