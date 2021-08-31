@@ -307,7 +307,7 @@ public abstract class DefaultSession implements Session
     protected int count(String sql, List<Object> params) throws POException
     {
         int count = 0;
-        sql = "Select COUNT(*) as COUNT FROM (" + sql + ") AS POT";
+        sql = "SELECT COUNT(*) as COUNT FROM (" + sql + ")";
         try
         {
             List<HashMap<String, Object>> list = select(sql, params);

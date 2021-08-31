@@ -23,6 +23,7 @@ public class Test extends PO
 
 
                                     
+
     public Test(Integer id,Integer sd)
     {
         if (null == this.id)
