@@ -27,6 +27,8 @@ package com.sandrew.bury.sql;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.common.POMapping;
 
+import java.util.List;
+
 /**
  * Function    : SQL生成接口
  * @author     : SuMMeR
@@ -46,4 +48,6 @@ public interface SqlCreator
 	String insertAllCreator(POMapping mapping, PO po);
 
 	String selectCreatorForOrder(POMapping mapping, PO po, String order, String... colName);
+
+	String getProdOrFuncSql(String functionName, List<Object> ins, List<Integer> outs, boolean isProcedure);
 }

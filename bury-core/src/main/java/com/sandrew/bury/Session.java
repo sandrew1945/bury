@@ -216,7 +216,8 @@ public interface Session
      * @param callback		回调函数
      * @return				装载着PO或自定义bean的集合
      */
-    <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback);
+    // TODO oracle、mysql无法兼容，待优化
+    // <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback);
 
     /**
      *

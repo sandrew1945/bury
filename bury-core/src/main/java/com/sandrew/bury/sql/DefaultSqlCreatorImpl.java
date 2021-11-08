@@ -24,12 +24,14 @@ package com.sandrew.bury.sql;
 import com.sandrew.bury.bean.PO;
 import com.sandrew.bury.bean.Pack;
 import com.sandrew.bury.common.POMapping;
+import com.sandrew.bury.util.BuryConstants;
 import com.sandrew.bury.util.POUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * Function    : 
@@ -140,6 +142,34 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 			throw new RuntimeException("create the SQL of update error!", e);
 		}
 		return sql.toString();
+	}
+
+	@Override
+	public String getProdOrFuncSql(String functionName, List<Object> ins, List<Integer> outs, boolean isProcedure)
+	{
+		try
+		{
+			StringBuilder sB = new StringBuilder();
+			if (isProcedure)
+			{
+				// 拼装存储过程的SQL
+				sB.append(BuryConstants.PROCEDURE_PREFIX).append(functionName);
+				sB.append(getProdOrFuncParameters(ins, outs));
+			}
+			else
+			{
+				// 拼装Function的SQL
+				sB.append(BuryConstants.FUNCTION_PREFIX).append(functionName);
+				sB.append(getProdOrFuncParameters(ins, outs));
+			}
+			sB.append(BuryConstants.PROD_FUNC_SUFFIX);
+			return sB.toString();
+		}
+		catch (Exception e)
+		{
+			logger.error(e.getMessage());
+			throw new RuntimeException("create the SQL of Prod Or Func error!", e);
+		}
 	}
 
 	/**
@@ -396,6 +426,55 @@ public class DefaultSqlCreatorImpl implements SqlCreator
 	private String deletePrefixCreator(String tabName)
 	{
 		return "DELETE FROM " + tabName;
+	}
+
+	/**
+	 *
+	 * Function    : 拼装Procedure或Function SQL的参数部分
+	 * LastUpdate  : 2010-6-12
+	 * @param ins
+	 * @param outs
+	 * @return
+	 */
+	private String getProdOrFuncParameters(List<Object> ins, List<Integer> outs)
+	{
+		StringBuilder sB = new StringBuilder();
+		sB.append(BuryConstants.PROD_FUNC_PARAMS_PREFIX);
+		if (null != ins && ins.size() > 0)
+		{
+			for (int i = 0; i < ins.size(); i++)
+			{
+				if (hasParametersHead(sB.toString()))
+				{
+					sB.append(",?");
+				}
+				else
+				{
+					sB.append("?");
+				}
+			}
+		}
+		if (null != outs && outs.size() > 0)
+		{
+			for (int i = 0; i < outs.size(); i++)
+			{
+				if (hasParametersHead(sB.toString()))
+				{
+					sB.append(",?");
+				}
+				else
+				{
+					sB.append("?");
+				}
+			}
+		}
+		sB.append(BuryConstants.PROD_FUNC_PARAMS_SUFFIX);
+		return sB.toString();
+	}
+
+	private boolean hasParametersHead(String paramters)
+	{
+		return paramters.startsWith(BuryConstants.PROD_FUNC_PARAMS_PREFIX + "?");
 	}
 
 	/**

@@ -234,6 +234,84 @@ public class BaseExecutor implements Executor
     }
 
     @Override
+    public Object callFunction(String sql, List<Object> ins, int outType)
+    {
+        CallableStatement cast = null;
+        try
+        {
+            Connection conn = transaction.getConnection();
+            cast = conn.prepareCall(sql);
+            // 注册输出参数类型
+            cast.registerOutParameter(1, outType);
+            // 注册输入参数
+            setProdOrFuncParameters(cast, ins, null, false);
+            cast.execute();
+            // 执行Function后获取输出参数
+            List<Integer> outs = new LinkedList<>();
+            outs.add(outType);
+            List<Object> retList = getProdOrFuncOutParams(cast, ins, outs, false);
+            return retList.get(0);
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call function error!");
+        }
+        finally
+        {
+            closeResultSetAndStatment(null, cast);
+        }
+    }
+
+    @Override
+    public List<Object> callProcedure(String sql, List<Object> ins, List<Integer> outs)
+    {
+        CallableStatement cast = null;
+        try
+        {
+            Connection conn = transaction.getConnection();
+            cast = conn.prepareCall(sql);
+            setProdOrFuncParameters(cast, ins, outs, true);
+            cast.execute();
+            return getProdOrFuncOutParams(cast, ins, outs, true);
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call procedure error!");
+        }
+        finally
+        {
+            closeResultSetAndStatment(null, cast);
+        }
+    }
+
+    @Override
+    public <T> List<T> callProcedure(String sql, List<Object> ins, DAOCallback<T> callback)
+    {
+        List<T> list = new ArrayList<>();
+        try
+        {
+            // 输出参数为一个CURSOR
+            List<Integer> outs = new ArrayList<>();
+            outs.add(POTypes.CURSOR);
+            List<Object> retList = callProcedure(sql, ins, outs);
+            // 返回一个ResultSet的List
+            ResultSet rs = (ResultSet) retList.get(0);
+            while (rs.next())
+            {
+                list.add(callback.wrapper(rs, list.size() + 1));
+            }
+            return list;
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call procedure error!");
+        }
+    }
+
+    @Override
     public void commit() throws SQLException
     {
         try
@@ -437,6 +515,374 @@ public class BaseExecutor implements Executor
                 return rs.getString(idx);
         }
         return null;
+    }
+
+
+    /**
+     *
+     * Function    : 设置Procedure或Function的输入,输出参数
+     * LastUpdate  : 2010-6-25
+     * @param cast
+     * @param ins
+     * @param outs
+     * @throws SQLException
+     */
+    private void setProdOrFuncParameters(CallableStatement cast, List<Object> ins, List<Integer> outs, boolean isProcedure) throws POException
+    {
+        if (null == cast)
+        {
+            throw new POException("CallableStatement isn't null");
+        }
+        try
+        {
+            int paramsPos = 1;
+            if (null != ins)
+            {
+                for (int i = 0; i < ins.size(); i++)
+                {
+                    if (isProcedure)
+                    {
+                        setParam(cast, paramsPos, ins.get(i));
+                    }
+                    else
+                    {
+                        setParam(cast, paramsPos + 1, ins.get(i));
+                    }
+                    paramsPos++;
+                }
+            }
+            if (null != outs)
+            {
+                for (int i = 0; i < outs.size(); i++)
+                {
+                    if (isProcedure)
+                    {
+                        registerOutParameter(cast, paramsPos, outs.get(i).intValue(), isProcedure);
+                    }
+                    else
+                    {
+                        throw new POException("Function can't set output parameters");
+                    }
+                    paramsPos++;
+                }
+            }
+        }
+        catch (SQLException throwables)
+        {
+            logger.error("ps set params error!", throwables);
+            throw new POException("ps set params error!", throwables);
+        }
+    }
+
+    /**
+     *
+     * Function    : 获取Procedure或Function的输出
+     * LastUpdate  : 2010-6-12
+     * @param cast
+     * @param ins
+     * @param outs
+     * @param isProcedure
+     * @return
+     * @throws SQLException
+     */
+    private List<Object> getProdOrFuncOutParams(CallableStatement cast, List<Object> ins, List<Integer> outs, boolean isProcedure) throws SQLException
+    {
+        if (outs != null)
+        {
+            List<Object> retList = new LinkedList<Object>();
+            int begin = ins == null ? 0 : ins.size();
+            for (int i = 0; i < outs.size(); i++)
+            {
+                int index = begin + i + 1;
+                switch (outs.get(i))
+                {
+                    case POTypes.ARRAY:
+                        break;
+                    case POTypes.BIGINT:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getLong(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getLong(index));
+                        }
+                        break;
+                    case POTypes.BINARY:
+                        break;
+                    case POTypes.BIT:
+                        break;
+                    case POTypes.BLOB:
+                        break;
+                    case POTypes.BOOLEAN:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getBoolean(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getBoolean(index));
+                        }
+                        break;
+                    case POTypes.CHAR:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getString(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getString(index));
+                        }
+                        retList.add(i, cast.getString(index));
+                        break;
+                    case POTypes.CLOB:
+                        break;
+                    case POTypes.DATALINK:
+                        break;
+                    case POTypes.DATE:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getDate(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getDate(index));
+                        }
+                        break;
+                    case POTypes.DECIMAL:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getBigDecimal(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getBigDecimal(index));
+                        }
+                        break;
+                    case POTypes.DISTINCT:
+                        break;
+                    case POTypes.DOUBLE:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getDouble(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getDouble(index));
+                        }
+                        break;
+                    case POTypes.FLOAT:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getFloat(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getFloat(index));
+                        }
+                        break;
+                    case POTypes.INTEGER:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getInt(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getInt(index));
+                        }
+                        break;
+                    case POTypes.JAVA_OBJECT:
+                        break;
+                    case POTypes.LONGVARBINARY:
+                        break;
+                    case POTypes.LONGVARCHAR:
+                        break;
+                    case POTypes.NULL:// nullֵ�Ĵ���
+                        retList.add(i, null);
+                        break;
+                    case POTypes.NUMERIC:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getBigDecimal(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getBigDecimal(index));
+                        }
+                        break;
+                    case POTypes.OTHER:
+                        break;
+                    case POTypes.REAL:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getFloat(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getFloat(index));
+                        }
+                        break;
+                    case POTypes.REF:
+                        break;
+                    case POTypes.SMALLINT:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getInt(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getInt(index));
+                        }
+                        break;
+                    case POTypes.STRUCT:
+                        break;
+                    case POTypes.TIME:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getTime(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getTime(index));
+                        }
+                        break;
+                    case POTypes.TIMESTAMP:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getTimestamp(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getTimestamp(index));
+                        }
+                        break;
+                    case POTypes.TINYINT:
+                        break;
+                    case POTypes.VARBINARY:
+                        break;
+                    case POTypes.VARCHAR:
+                        if (!isProcedure)
+                        {
+                            retList.add(i, cast.getString(1));
+                        }
+                        else
+                        {
+                            retList.add(i, cast.getString(index));
+                        }
+                        break;
+                    case POTypes.CURSOR:
+                        if (!isProcedure)
+                        {
+                            throw new RuntimeException("Function can't return cursor");
+                        }
+                        else
+                        {
+                            // TODO OracleCallableStatement无法找到，待优化
+                            // ResultSet rs = ((OracleCallableStatement) cast).getCursor(index);
+                            // retList.add(i, rs);
+                        }
+                        break;
+                }
+            }
+            return retList;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private void registerOutParameter(CallableStatement cast, int idx, int type, boolean isProcedure) throws SQLException
+    {
+        if (cast == null)
+        {
+            throw new POException("Register Out Parameter Error!");
+        }
+
+        switch (type)
+        {
+            case POTypes.INTEGER:
+                cast.registerOutParameter(idx, POTypes.INTEGER);
+                break;
+            case POTypes.BIGINT:
+                cast.registerOutParameter(idx, POTypes.BIGINT);
+                break;
+            case POTypes.ARRAY:
+                break;
+            case POTypes.BINARY:
+                break;
+            case POTypes.BIT:
+                break;
+            case POTypes.BLOB:
+                // cast.registerOutParameter(idx, POTypes.BLOB);
+                break;
+            case POTypes.BOOLEAN:
+                cast.registerOutParameter(idx, POTypes.BOOLEAN);
+                break;
+            case POTypes.CHAR:
+                cast.registerOutParameter(idx, POTypes.CHAR);
+                break;
+            case POTypes.CLOB:
+                break;
+            case POTypes.DATALINK:
+                break;
+            case POTypes.DATE:
+                cast.registerOutParameter(idx, POTypes.DATE);
+                break;
+            case POTypes.DECIMAL:
+                cast.registerOutParameter(idx, POTypes.DECIMAL);
+                break;
+            case POTypes.DISTINCT:
+                break;
+            case POTypes.DOUBLE:
+                cast.registerOutParameter(idx, POTypes.DOUBLE);
+                break;
+            case POTypes.FLOAT:
+                cast.registerOutParameter(idx, POTypes.FLOAT);
+                break;
+            case POTypes.JAVA_OBJECT:
+                break;
+            case POTypes.LONGVARBINARY:
+                break;
+            case POTypes.LONGVARCHAR:
+                break;
+            case POTypes.NULL:
+                cast.registerOutParameter(idx, POTypes.NULL);
+                break;
+            case POTypes.NUMERIC:
+                cast.registerOutParameter(idx, POTypes.NUMERIC);
+                break;
+            case POTypes.OTHER:
+                break;
+            case POTypes.REAL:
+                cast.registerOutParameter(idx, POTypes.REAL);
+                break;
+            case POTypes.REF:
+                cast.registerOutParameter(idx, POTypes.REF);
+                break;
+            case POTypes.SMALLINT:
+                cast.registerOutParameter(idx, POTypes.SMALLINT);
+                break;
+            case POTypes.STRUCT:
+                // cast.registerOutParameter(idx, POTypes.STRUCT);
+                break;
+            case POTypes.TIME:
+                cast.registerOutParameter(idx, POTypes.TIME);
+                break;
+            case POTypes.TIMESTAMP:
+                cast.registerOutParameter(idx, POTypes.TIMESTAMP);
+                break;
+            case POTypes.TINYINT:
+                break;
+            case POTypes.VARBINARY:
+                break;
+            case POTypes.VARCHAR:
+                cast.registerOutParameter(idx, POTypes.VARCHAR);
+                break;
+            case POTypes.CURSOR:
+                cast.registerOutParameter(idx, POTypes.CURSOR);
+                break;
+        }
     }
 
     /**

@@ -254,20 +254,58 @@ public abstract class DefaultSession implements Session
     @Override
     public Object callFunction(String functionName, List<Object> ins, int outType)
     {
-        return null;
+        try
+        {
+            // 拼装SQL
+            SqlCreator creator = new DefaultSqlCreatorImpl();
+            String sql = creator.getProdOrFuncSql(functionName, ins, null, false);
+            logger.debug("SQL =====>" + sql);
+            return this.executor.callFunction(functionName, ins, outType);
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call function error!");
+        }
     }
 
     @Override
     public List<Object> callProcedure(String procedureName, List<Object> ins, List<Integer> outs)
     {
-        return null;
+        try
+        {
+            // 拼装SQL
+            SqlCreator creator = new DefaultSqlCreatorImpl();
+            String sql = creator.getProdOrFuncSql(procedureName, ins, outs, true);
+            logger.debug("SQL =====>" + sql);
+            return this.executor.callProcedure(sql, ins, outs);
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call procedure error!");
+        }
     }
 
-    @Override
-    public <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback)
-    {
-        return null;
-    }
+//    @Override
+//    public <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback)
+//    {
+//        try
+//        {
+//            // 拼装SQL
+//            SqlCreator creator = new DefaultSqlCreatorImpl();
+//            List<Integer> outs = new ArrayList<>();
+//            outs.add(POTypes.CURSOR);
+//            String sql = creator.getProdOrFuncSql(procedureName, ins, outs, true);
+//            logger.debug("SQL =====>" + sql);
+//            return this.executor.callProcedure(sql, ins, callback);
+//        }
+//        catch (Exception e)
+//        {
+//            logger.error(e.getMessage(), e);
+//            throw new POException("call procedure error!");
+//        }
+//    }
 
     /* (non-Javadoc)
      * @see com.autosys.po3.Session#getIntegerPK(java.lang.String)
@@ -370,4 +408,6 @@ public abstract class DefaultSession implements Session
     {
         return new byte[0];
     }
+
+
 }

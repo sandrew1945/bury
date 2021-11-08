@@ -50,4 +50,23 @@ public interface BuryConstants
 
     // Long类型的最大小数位
     final int JAVA_TYPE_FLOAT_SCALE_MAX = 4;
+
+
+    /**
+     * Procedure及Function
+     */
+    // 参数前缀
+    String PROD_FUNC_PARAMS_PREFIX = "(";
+
+    // 参数后缀
+    String PROD_FUNC_PARAMS_SUFFIX = ")";
+
+    // Function前缀
+    String FUNCTION_PREFIX = "{? = call ";
+
+    // Procedure前缀
+    String PROCEDURE_PREFIX = "{ call ";
+
+    // Procedure及Function后缀
+    String PROD_FUNC_SUFFIX = "}";
 }

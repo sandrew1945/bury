@@ -48,6 +48,33 @@ public interface Executor
     int[] insertBatch(String sql, List<BatchParameter> params);
 
     /**
+     * @Author summer
+     * @Description 调用function
+     * @Date 10:41 2021/11/8
+     * @Param [functionName, ins, outType]
+     * @return java.lang.Object
+     **/
+    Object callFunction(String sql, List<Object> ins, int outType);
+
+    /**
+     * @Author summer
+     * @Description 调用procedure
+     * @Date 14:08 2021/11/8
+     * @Param [procedureName, ins, outs]
+     * @return java.util.List<java.lang.Object>
+     **/
+    List<Object> callProcedure(String sql, List<Object> ins, List<Integer> outs);
+
+    /**
+     * @Author summer
+     * @Description 调用procedure
+     *              特殊的Procedure调用,只返回一个CURSOR
+     * @Date 14:09 2021/11/8
+     * @Param [procedureName, ins, callback]
+     * @return java.util.List<T>
+     **/
+    <T> List<T> callProcedure(String sql, List<Object> ins, DAOCallback<T> callback);
+    /**
      *  提交
      */
     void commit() throws SQLException;
