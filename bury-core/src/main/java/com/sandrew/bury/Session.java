@@ -195,7 +195,7 @@ public interface Session
      * @param outType		输出类型
      * @return
      */
-    Object callFunction(String functionName, List<Object> ins, int outType);
+    Object callFunction(String functionName, List<Object> ins, int outType) throws POException;;
 
     /**
      *
@@ -205,7 +205,7 @@ public interface Session
      * @param outs			输出参数集合
      * @return				输出结果集合
      */
-    List<Object> callProcedure(String procedureName, List<Object> ins, List<Integer> outs);
+    List<Object> callProcedure(String procedureName, List<Object> ins, List<Integer> outs) throws POException;;
 
     /**
      *
@@ -216,8 +216,7 @@ public interface Session
      * @param callback		回调函数
      * @return				装载着PO或自定义bean的集合
      */
-    // TODO oracle、mysql无法兼容，待优化
-    // <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback);
+     <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback) throws POException;;
 
     /**
      *

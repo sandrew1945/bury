@@ -75,6 +75,12 @@ public class MSSqlSession extends DefaultSession
     }
 
     @Override
+    public <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback) throws POException
+    {
+        throw new UnsupportedMethodException("MSSQL暂时不支持该方法");
+    }
+
+    @Override
     public Object getPK(String sequenceName) throws POException
     {
         throw new UnsupportedMethodException("MSSQL暂时不支持该方法");

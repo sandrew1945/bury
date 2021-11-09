@@ -249,10 +249,10 @@ public abstract class DefaultSession implements Session
     }
 
     @Override
-    abstract public <T> PageResult<T> pageQuery(String sql, List<Object> params, DAOCallback<T> callback, int pageSize, int curPage) throws POException;
+    public abstract<T> PageResult<T> pageQuery(String sql, List<Object> params, DAOCallback<T> callback, int pageSize, int curPage) throws POException;
 
     @Override
-    public Object callFunction(String functionName, List<Object> ins, int outType)
+    public Object callFunction(String functionName, List<Object> ins, int outType) throws POException
     {
         try
         {
@@ -270,7 +270,7 @@ public abstract class DefaultSession implements Session
     }
 
     @Override
-    public List<Object> callProcedure(String procedureName, List<Object> ins, List<Integer> outs)
+    public List<Object> callProcedure(String procedureName, List<Object> ins, List<Integer> outs) throws POException
     {
         try
         {
@@ -287,25 +287,8 @@ public abstract class DefaultSession implements Session
         }
     }
 
-//    @Override
-//    public <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback)
-//    {
-//        try
-//        {
-//            // 拼装SQL
-//            SqlCreator creator = new DefaultSqlCreatorImpl();
-//            List<Integer> outs = new ArrayList<>();
-//            outs.add(POTypes.CURSOR);
-//            String sql = creator.getProdOrFuncSql(procedureName, ins, outs, true);
-//            logger.debug("SQL =====>" + sql);
-//            return this.executor.callProcedure(sql, ins, callback);
-//        }
-//        catch (Exception e)
-//        {
-//            logger.error(e.getMessage(), e);
-//            throw new POException("call procedure error!");
-//        }
-//    }
+    @Override
+    public abstract <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback) throws POException;
 
     /* (non-Javadoc)
      * @see com.autosys.po3.Session#getIntegerPK(java.lang.String)

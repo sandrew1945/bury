@@ -2,9 +2,12 @@ package com.sandrew.bury;
 
 import com.sandrew.bury.bean.PageResult;
 import com.sandrew.bury.callback.DAOCallback;
+import com.sandrew.bury.common.POTypes;
 import com.sandrew.bury.configuration.Configuration;
 import com.sandrew.bury.exception.POException;
 import com.sandrew.bury.executor.Executor;
+import com.sandrew.bury.sql.DefaultSqlCreatorImpl;
+import com.sandrew.bury.sql.SqlCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +70,26 @@ public class OracleSession extends DefaultSession
     public int updateForLob(String sql, List<Object> params) throws POException
     {
         return executor.update(sql, params, null);
+    }
+
+    @Override
+    public <T> List<T> callProcedure(String procedureName, List<Object> ins, DAOCallback<T> callback)
+    {
+        try
+        {
+            // 拼装SQL
+            SqlCreator creator = new DefaultSqlCreatorImpl();
+            List<Integer> outs = new ArrayList<>();
+            outs.add(POTypes.CURSOR);
+            String sql = creator.getProdOrFuncSql(procedureName, ins, outs, true);
+            logger.debug("SQL =====>" + sql);
+            return this.executor.callProcedure(sql, ins, callback);
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            throw new POException("call procedure error!");
+        }
     }
 
     @Override

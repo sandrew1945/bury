@@ -21,6 +21,7 @@ public class CallProcedureOracle
 		Session session = factory.openSession("ds002");
 		try
 		{
+			// 调用Procedure
 			List<Object> ins = new ArrayList<>();
 			List<Integer> outs = new ArrayList<>();
 			ins.add("www");
@@ -28,6 +29,15 @@ public class CallProcedureOracle
 			outs.add(POTypes.VARCHAR);
 			List<Object> list = session.callProcedure("TESTPRO", ins, outs);
 			System.out.println(list);
+
+			// 调用返回一个CURSOR的Procedure
+			List<String> list2 = session.callProcedure("TESTPROCUR", null, (rs, index) -> {
+				System.out.println(rs.getString("ID"));
+				System.out.println(rs.getString("NAME"));
+				System.out.println(rs.getString("DESCP"));
+				return rs.getString("ID");
+			});
+			System.out.println(list2);
 		}
 		catch (Exception e)
 		{

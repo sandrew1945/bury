@@ -289,13 +289,19 @@ public class BaseExecutor implements Executor
     @Override
     public <T> List<T> callProcedure(String sql, List<Object> ins, DAOCallback<T> callback)
     {
+        CallableStatement cast = null;
         List<T> list = new ArrayList<>();
         try
         {
+            Connection conn = transaction.getConnection();
+            cast = conn.prepareCall(sql);
             // 输出参数为一个CURSOR
             List<Integer> outs = new ArrayList<>();
             outs.add(POTypes.CURSOR);
-            List<Object> retList = callProcedure(sql, ins, outs);
+            setProdOrFuncParameters(cast, ins, outs, true);
+            cast.execute();
+
+            List<Object> retList = getProdOrFuncOutParams(cast, ins, outs, true);
             // 返回一个ResultSet的List
             ResultSet rs = (ResultSet) retList.get(0);
             while (rs.next())
@@ -308,6 +314,10 @@ public class BaseExecutor implements Executor
         {
             logger.error(e.getMessage(), e);
             throw new POException("call procedure error!");
+        }
+        finally
+        {
+            closeResultSetAndStatment(null, cast);
         }
     }
 
@@ -777,9 +787,8 @@ public class BaseExecutor implements Executor
                         }
                         else
                         {
-                            // TODO OracleCallableStatement无法找到，待优化
-                            // ResultSet rs = ((OracleCallableStatement) cast).getCursor(index);
-                            // retList.add(i, rs);
+                             ResultSet rs = (ResultSet)cast.getObject(index);
+                             retList.add(i, rs);
                         }
                         break;
                 }
