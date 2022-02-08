@@ -176,7 +176,7 @@ public class POCallBack<T extends PO> implements DAOCallback<T>
 					{
 						fieldClz = Class.forName(fieldType);
 					}
-					System.out.println(((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0].getTypeName() + "    " + field.getName() + "    " + fieldType);
+//					System.out.println(((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0].getTypeName() + "    " + field.getName() + "    " + fieldType);
 
 				}
 				else
