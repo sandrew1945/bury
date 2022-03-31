@@ -24,7 +24,7 @@
         <logback.version>1.2.3</logback.version>
         <dom4j.version>1.6.1</dom4j.version>
         <jaxen.version>1.1.1</jaxen.version>
-        <springframework.version>5.0.6.RELEASE</springframework.version>
+        <springframework.version>5.3.18</springframework.version>
         <springboot.version>2.0.2.RELEASE</springboot.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <druid.version>1.0.7</druid.version>
